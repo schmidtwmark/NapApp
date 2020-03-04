@@ -10,7 +10,40 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, World!")
+        Group {
+            Text("Hello Jam")
+        }
+        .contextMenu(menuItems: getMenuItems())
+    }
+    
+}
+
+func getMenuItems() -> View {
+    return {
+        Button(action: {
+            print("Refresh")
+        }, label: {
+            VStack{
+                Image(systemName: "arrow.clockwise")
+                    .font(.title)
+                Text("Refresh view")
+            }
+        })
+    }
+        
+        
+}
+
+
+struct TimerView: View {
+    var body: some View {
+        Text("Timer View")
+    }
+}
+
+struct AlarmView: View {
+    var body: some View {
+        Text("Alarm View")
     }
 }
 
