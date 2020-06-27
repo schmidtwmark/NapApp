@@ -11,7 +11,7 @@
 		ED2D6E45240B613500FEB222 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E43240B613500FEB222 /* Interface.storyboard */; };
 		ED2D6E47240B613900FEB222 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E46240B613900FEB222 /* Assets.xcassets */; };
 		ED2D6E4E240B613900FEB222 /* NapApp WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = ED2D6E4D240B613900FEB222 /* NapApp WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		ED2D6E53240B613900FEB222 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6E52240B613900FEB222 /* ContentView.swift */; };
+		ED2D6E53240B613900FEB222 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6E52240B613900FEB222 /* MainView.swift */; };
 		ED2D6E55240B613900FEB222 /* HostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6E54240B613900FEB222 /* HostingController.swift */; };
 		ED2D6E57240B613900FEB222 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */; };
 		ED2D6E59240B613A00FEB222 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E58240B613A00FEB222 /* Assets.xcassets */; };
@@ -67,7 +67,7 @@
 		ED2D6E46240B613900FEB222 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED2D6E48240B613900FEB222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED2D6E4D240B613900FEB222 /* NapApp WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "NapApp WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED2D6E52240B613900FEB222 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		ED2D6E52240B613900FEB222 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		ED2D6E54240B613900FEB222 /* HostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingController.swift; sourceTree = "<group>"; };
 		ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		ED2D6E58240B613A00FEB222 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 		ED2D6E51240B613900FEB222 /* NapApp WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
-				ED2D6E52240B613900FEB222 /* ContentView.swift */,
+				ED2D6E52240B613900FEB222 /* MainView.swift */,
 				ED2D6E54240B613900FEB222 /* HostingController.swift */,
 				ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */,
 				ED2D6E58240B613A00FEB222 /* Assets.xcassets */,
@@ -265,7 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED2D6E55240B613900FEB222 /* HostingController.swift in Sources */,
-				ED2D6E53240B613900FEB222 /* ContentView.swift in Sources */,
+				ED2D6E53240B613900FEB222 /* MainView.swift in Sources */,
 				ED2D6E57240B613900FEB222 /* ExtensionDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

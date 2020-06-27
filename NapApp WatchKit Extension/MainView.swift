@@ -15,12 +15,8 @@ struct MainView: View {
     @State private var selectedTimeIndex = 0;
     
     var body: some View {
-        
-        
         GeometryReader() {
             geometry in self.TimerView(geometry: geometry)
-
-
         }
         .edgesIgnoringSafeArea([.bottom])
     }
@@ -29,9 +25,7 @@ struct MainView: View {
         return
             VStack {
                 Text("Set Nap Length").frame(maxWidth: .infinity, alignment: .leading)
-    
                 TimePicker(selectedTimeIndex: $selectedTimeIndex)
-    
                 StartButton(geometry: geometry, selectedTimeIndex: $selectedTimeIndex)
             }
     }
@@ -52,6 +46,7 @@ struct StartButton: View {
         })
             .accentColor(Color.green)
             // Frame uses bottom safe area because side safe area is only 0.5 for some unknown reason on series 4/5
+            // I don't want to have to read the fucking device type to know which button to use
             .frame(width: geometry.frame(in: .global).width - geometry.safeAreaInsets.bottom, height: 44, alignment: Alignment(horizontal: .center, vertical: .center))
     }
 }
