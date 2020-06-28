@@ -16,6 +16,7 @@
 		ED2D6E57240B613900FEB222 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */; };
 		ED2D6E59240B613A00FEB222 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E58240B613A00FEB222 /* Assets.xcassets */; };
 		ED2D6E5C240B613A00FEB222 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E5B240B613A00FEB222 /* Preview Assets.xcassets */; };
+		ED71BA9324A7CC3000DA90B6 /* NapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED71BA9224A7CC3000DA90B6 /* NapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		ED2D6E58240B613A00FEB222 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED2D6E5B240B613A00FEB222 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ED2D6E5D240B613A00FEB222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED71BA9224A7CC3000DA90B6 /* NapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				ED2D6E52240B613900FEB222 /* MainView.swift */,
+				ED71BA9224A7CC3000DA90B6 /* NapView.swift */,
 				ED2D6E54240B613900FEB222 /* HostingController.swift */,
 				ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */,
 				ED2D6E58240B613A00FEB222 /* Assets.xcassets */,
@@ -266,6 +269,7 @@
 			files = (
 				ED2D6E55240B613900FEB222 /* HostingController.swift in Sources */,
 				ED2D6E53240B613900FEB222 /* MainView.swift in Sources */,
+				ED71BA9324A7CC3000DA90B6 /* NapView.swift in Sources */,
 				ED2D6E57240B613900FEB222 /* ExtensionDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

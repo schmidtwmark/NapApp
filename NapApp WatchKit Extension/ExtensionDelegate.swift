@@ -8,7 +8,25 @@
 
 import WatchKit
 
-class ExtensionDelegate: NSObject, WKExtensionDelegate {
+class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSessionDelegate{
+    func extendedRuntimeSession(_ extendedRuntimeSession: WKExtendedRuntimeSession, didInvalidateWith reason: WKExtendedRuntimeSessionInvalidationReason, error: Error?) {
+        
+        print("extendedRuntimeSession")
+    }
+    
+    func extendedRuntimeSessionDidStart(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
+        print("extendedRuntimeSessionDidStart")
+        // TODO start tracking heart rate?
+        
+        // How to buzz?
+        
+    }
+    
+    func extendedRuntimeSessionWillExpire(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
+        print("extendedRuntimeSessionWillExpire")
+        
+    }
+    
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.

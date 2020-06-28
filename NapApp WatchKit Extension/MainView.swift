@@ -8,7 +8,9 @@
 
 import SwiftUI
 
-var times = [20, 30, 40, 50, 60, 75, 90, 120]
+
+
+var times = [5, 10, 20, 30, 40, 50, 60, 75, 90, 120]
 
 struct MainView: View {
     
@@ -40,14 +42,14 @@ struct StartButton: View {
         self._selectedTimeIndex = selectedTimeIndex
     }
     var body: some View {
-        Button("Start", action: {
-            let time = times[self.selectedTimeIndex]
-            print("Start Pressed, selected time " + String(time))
-        })
-            .accentColor(Color.green)
-            // Frame uses bottom safe area because side safe area is only 0.5 for some unknown reason on series 4/5
-            // I don't want to have to read the fucking device type to know which button to use
-            .frame(width: geometry.frame(in: .global).width - geometry.safeAreaInsets.bottom, height: 44, alignment: Alignment(horizontal: .center, vertical: .center))
+        NavigationLink(
+            destination: NapView(targetTime:Date().advanced(by: TimeInterval(times[self.selectedTimeIndex])))) {
+               Text("Start")
+            }
+        .accentColor(Color.green)
+        // Frame uses bottom safe area because side safe area is only 0.5 for some unknown reason on series 4/5
+        // I don't want to have to read the fucking device type to know which button to use
+        .frame(width: geometry.frame(in: .global).width - geometry.safeAreaInsets.bottom, height: 44, alignment: Alignment(horizontal: .center, vertical: .center))
     }
 }
 
@@ -68,7 +70,7 @@ struct TimePicker: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
     }
