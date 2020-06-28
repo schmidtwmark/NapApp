@@ -35,7 +35,7 @@ struct NapView: View {
                         Text(self.dateFormatTime(date: self.targetTime))
                             .font(.system(size: geometry.frame(in: .global).width * 0.25))
                     }
-                CharacterArc(geometry: geometry, character: emojis[0])
+                CharacterArc(geometry: geometry, characters: emojis)
             }
         }.navigationBarTitle("Cancel")
             .edgesIgnoringSafeArea(.vertical)
@@ -50,17 +50,22 @@ struct NapView: View {
     }
 }
 
+struct AnimationConfig {
+    public var t: Double = 0.0
+    public var index: Int = 0
+}
+
 struct CharacterArc : View {
     private let width : CGFloat
     private let height : CGFloat
-    private let character : String
+    private let characters : Array<String>
     private let path : Path
     
-    @State private var t: Double = 0.0
-    init(geometry: GeometryProxy, character: String ) {
+    @State private var animationConfig = AnimationConfig()
+    init(geometry: GeometryProxy, characters: Array<String>) {
         self.width = geometry.frame(in: .global).width
         self.height = geometry.frame(in: .global).height
-        self.character = character
+        self.characters = characters
 
         let start = CGPoint(x: 0, y: -self.height / 2)
         let peak = CGPoint(x: self.width/2, y: -self.height / 4)
@@ -85,18 +90,21 @@ struct CharacterArc : View {
     
     private func adjustParameter(t : Double) -> Double {
         let x = (t - 0.5) * (Double.pi / 2)
-        
         let y = (tan(x) + 1) / 2
-//        print("t: " + String(format: "%.2f", t) + " x: " + String(format: "%2f", x) + " y: " + String(format: "%2f", y))
-        print(String(format: "%.2f", t) + " " + String(format: "%2f", x) + " " + String(format: "%2f", y))
         return y
     }
     
     var body : some View {
-        Text(character).position(pointAlongPath(t: CGFloat(adjustParameter(t: t))))
+        Text(characters[animationConfig.index])
+            .font(.system(size: self.width * 0.15))
+            .position(pointAlongPath(t: CGFloat(adjustParameter(t: animationConfig.t))))
         .onReceive(Timer.publish(every: 0.01, on: .main, in: .default).autoconnect(),
                 perform: {
-                    self.t = $0.timeIntervalSince1970.truncatingRemainder(dividingBy: 1)
+                    let value = $0.timeIntervalSince1970 / 1.5
+                    self.animationConfig.t = value.truncatingRemainder(dividingBy: 2)
+                    self.animationConfig.index = Int(((value + 0.5) / 2).truncatingRemainder(dividingBy: TimeInterval(self.characters.count)))
+                    print("t: " + String(self.animationConfig.t) + " index: " + String(self.animationConfig.index))
+                    
                 }
         )
 
