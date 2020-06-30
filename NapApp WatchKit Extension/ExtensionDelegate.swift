@@ -40,6 +40,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
         
     }
     
+    func handle(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
+        print("Launching handle function")
+        extendedRuntimeSession.delegate = self
+    }
+    
     private func tick() {
         print("Ticking")
         self.startHeartRateQuery(quantityTypeIdentifier: .heartRate)
@@ -56,20 +61,24 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
                 return
         }
         
+        // Set up the immutable HKObserverQuery
         let heartRateQuery = HKObserverQuery.init(
             sampleType: sampleType,
             predicate: nil) {  query, completionHandler, error in
+                // This is fired every time new samples are retrieved
+                // This also seems to turn on active sensing to get heart rates every ~5 seconds
                 guard error == nil else {
                     print("error with observer query")
                     return
                 }
-//
-//                print("Successfully subscribed to heart beats")
-                print("In subscribe handler")
+                // Get the actual query
                 self.startHeartRateQuery(quantityTypeIdentifier: .heartRate)
+                
+                // Unclear if I actually need this, but it doesn't change anything
                 completionHandler()
 
         }
+        // Execute the actual query
         print("Subscribing to heart beats...")
         healthStore.execute(heartRateQuery)
     }
@@ -78,30 +87,37 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
     private func startHeartRateQuery(quantityTypeIdentifier: HKQuantityTypeIdentifier) {
            
         print("Starting heart rate query")
+        // Set the predicate to get only samples from the last hour
+        // Could be last minute and should be just fine
         let predicate = HKQuery
             .predicateForSamples(
                 withStart: Date().addingTimeInterval(-3600),
                 end: Date(),
             options: [])
-
+        
+        // Sort most recent
         let sortDescriptor = NSSortDescriptor(
             key: HKSampleSortIdentifierStartDate,
             ascending: false)
         let query = HKSampleQuery(sampleType: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!,
                                   predicate: predicate,
-                                  limit: Int(1),
+                                  limit: Int(1), //Get only one
                                   sortDescriptors: [sortDescriptor]) { query, results, error in
-
+                                    // Fired when query completes
                                     guard let samples = results as? [HKQuantitySample] else {
                                         return
                                     }
+                                    // Should only be one sample
                                     for s in samples {
                                         let heartRate = s.quantity.doubleValue(for: self.heartRateQuantity)
                                         let timestamp = s.endDate
                                         print("Recent heart rate: \(heartRate) at time \(timestamp)")
-                                        self.heartData.append(
-                                            heartRate: heartRate,
-                                            timestamp: timestamp)
+                                        // Log heart rate to my internal structure for processing
+                                        DispatchQueue.main.async {
+                                            self.heartData.append(
+                                                heartRate: heartRate,
+                                                timestamp: timestamp)
+                                        }
                                     }
         }
         healthStore.execute(query)
