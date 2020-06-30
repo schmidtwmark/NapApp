@@ -17,7 +17,6 @@ var delegate = ExtensionDelegate()
 let emojis = ["🐑", "💤", "😴"]
 struct NapView: View {
     private let targetTime : Date
-    var healthStore = HKHealthStore()
 
     init(targetTime : Date) {
         self.targetTime = targetTime
@@ -55,10 +54,9 @@ struct NapView: View {
         let healthKitTypes: Set = [
             HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!]
         
-        healthStore.requestAuthorization(toShare: [], read: healthKitTypes) { _, _ in }
+        delegate.healthStore.requestAuthorization(toShare: [], read: healthKitTypes) { _, _ in }
         
         print("Starting session!")
-        delegate.store = healthStore
         session = WKExtendedRuntimeSession()
         session!.delegate = delegate
         session!.start(at: targetTime)
@@ -77,20 +75,15 @@ struct NapView: View {
 }
 
 struct HeartRateView : View{
-
+    @ObservedObject var heartData : HeartData = delegate.heartData
+    
     var body : some View {
-        if delegate.heartData.getLastHeartRate() != nil {
-            return AnyView(Text("❤️ \(delegate.heartData.getLastHeartRate()!.heartRate) BPM"))
-        } else {
-            return AnyView(EmptyView())
-        }
+        getView()
     }
     private func getView() -> some View {
-        if delegate.heartData.getLastHeartRate() != nil {
-            print("Has heart rate value")
-            return AnyView(Text("❤️ \(delegate.heartData.getLastHeartRate()!.heartRate) BPM"))
+        if heartData.getLastHeartRate() != nil {
+            return AnyView(Text("❤️ \(String(format: "%.0f", heartData.getLastHeartRate()!.heartRate)) BPM"))
         } else {
-            print("Doesn't has heart rate value")
             return AnyView(EmptyView())
         }
         

@@ -13,7 +13,7 @@ import Combine
 class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSessionDelegate{
     
     var timer : Timer?
-    public var store : HKHealthStore?
+    public var healthStore : HKHealthStore = HKHealthStore()
     public var heartData : HeartData = HeartData()
     
     let heartRateQuantity = HKUnit(from: "count/min")
@@ -32,7 +32,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
 //            extendedRuntimeSession.notifyUser(hapticType: WKHapticType.notification, repeatHandler: {_ in 4})
 //        }
         print("Starting, session state \(extendedRuntimeSession)")
-        tick()
         subscribeToHeartBeatChanges()
     }
     func extendedRuntimeSessionWillExpire(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
@@ -44,18 +43,14 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
     private func tick() {
         print("Ticking")
         self.startHeartRateQuery(quantityTypeIdentifier: .heartRate)
-        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false, block: { [weak self] (_) in
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false, block: { (_) in
             print("In timer")
-            self?.tick()
+            self.tick()
         })
     }
     
     public func subscribeToHeartBeatChanges() {
         // Creating the sample for the heart rate
-        guard let healthStore = store else {
-            print("No healthstore")
-            return
-        }
         guard let sampleType: HKSampleType =
             HKObjectType.quantityType(forIdentifier: .heartRate) else {
                 return
@@ -68,12 +63,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
                     print("error with observer query")
                     return
                 }
-//                
+//
 //                print("Successfully subscribed to heart beats")
-//                if self.timer == nil {
-//                    self.tick()
-//                }
-//                completionHandler()
+                print("In subscribe handler")
+                self.startHeartRateQuery(quantityTypeIdentifier: .heartRate)
+                completionHandler()
 
         }
         print("Subscribing to heart beats...")
@@ -83,10 +77,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
 
     private func startHeartRateQuery(quantityTypeIdentifier: HKQuantityTypeIdentifier) {
            
-        guard let healthStore = store else {
-            print("No healthstore")
-            return
-        }
         print("Starting heart rate query")
         let predicate = HKQuery
             .predicateForSamples(
@@ -121,15 +111,18 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSession
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
+        print("Did finish launching")
     }
 
     func applicationDidBecomeActive() {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        print("Did become active")
     }
 
     func applicationWillResignActive() {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, etc.
+        print("Resign active")
     }
 
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {

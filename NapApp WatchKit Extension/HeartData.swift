@@ -20,8 +20,8 @@ struct HeartRateSample {
 }
 
 // Sample rate agnostic heart rate uptick detector
-class HeartData {
-    private var heartRates : [HeartRateSample]
+class HeartData : ObservableObject{
+    @Published private var heartRates : [HeartRateSample]
     private var deltas : [Double]
     
     init(heartRates: [HeartRateSample] = []) {
