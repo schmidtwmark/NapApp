@@ -16,6 +16,8 @@
 		ED2D6E57240B613900FEB222 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */; };
 		ED2D6E59240B613A00FEB222 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E58240B613A00FEB222 /* Assets.xcassets */; };
 		ED2D6E5C240B613A00FEB222 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2D6E5B240B613A00FEB222 /* Preview Assets.xcassets */; };
+		ED4414E324A8423E00E05EC3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4414E224A8423E00E05EC3 /* HealthKit.framework */; };
+		ED4414E524A8EC9900E05EC3 /* HeartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4414E424A8EC9900E05EC3 /* HeartData.swift */; };
 		ED71BA9324A7CC3000DA90B6 /* NapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED71BA9224A7CC3000DA90B6 /* NapView.swift */; };
 /* End PBXBuildFile section */
 
@@ -74,6 +76,9 @@
 		ED2D6E58240B613A00FEB222 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED2D6E5B240B613A00FEB222 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		ED2D6E5D240B613A00FEB222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED4414E024A8423E00E05EC3 /* NapApp WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NapApp WatchKit Extension.entitlements"; sourceTree = "<group>"; };
+		ED4414E224A8423E00E05EC3 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.2.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		ED4414E424A8EC9900E05EC3 /* HeartData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartData.swift; sourceTree = "<group>"; };
 		ED71BA9224A7CC3000DA90B6 /* NapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED4414E324A8423E00E05EC3 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +100,7 @@
 				ED2D6E42240B613500FEB222 /* NapApp WatchKit App */,
 				ED2D6E51240B613900FEB222 /* NapApp WatchKit Extension */,
 				ED2D6E3B240B613500FEB222 /* Products */,
+				ED4414E124A8423E00E05EC3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -120,8 +127,10 @@
 		ED2D6E51240B613900FEB222 /* NapApp WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				ED4414E024A8423E00E05EC3 /* NapApp WatchKit Extension.entitlements */,
 				ED2D6E52240B613900FEB222 /* MainView.swift */,
 				ED71BA9224A7CC3000DA90B6 /* NapView.swift */,
+				ED4414E424A8EC9900E05EC3 /* HeartData.swift */,
 				ED2D6E54240B613900FEB222 /* HostingController.swift */,
 				ED2D6E56240B613900FEB222 /* ExtensionDelegate.swift */,
 				ED2D6E58240B613A00FEB222 /* Assets.xcassets */,
@@ -137,6 +146,14 @@
 				ED2D6E5B240B613A00FEB222 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		ED4414E124A8423E00E05EC3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ED4414E224A8423E00E05EC3 /* HealthKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED2D6E55240B613900FEB222 /* HostingController.swift in Sources */,
+				ED4414E524A8EC9900E05EC3 /* HeartData.swift in Sources */,
 				ED2D6E53240B613900FEB222 /* MainView.swift in Sources */,
 				ED71BA9324A7CC3000DA90B6 /* NapView.swift in Sources */,
 				ED2D6E57240B613900FEB222 /* ExtensionDelegate.swift in Sources */,
@@ -417,6 +435,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "NapApp WatchKit Extension/NapApp WatchKit Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"NapApp WatchKit Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = C2UW47HS8X;
@@ -441,6 +460,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "NapApp WatchKit Extension/NapApp WatchKit Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"NapApp WatchKit Extension/Preview Content\"";
 				DEVELOPMENT_TEAM = C2UW47HS8X;

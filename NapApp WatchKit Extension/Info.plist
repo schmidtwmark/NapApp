@@ -30,11 +30,18 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>
 	</dict>
+	<key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
+	<string>NapApp records your heartrate to find the optimal moment to wake you from your nap</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>NapApp reads information about your resting heart rate to find the optimal moment to wake you from your nap</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>NapApp will log your sleep in the Health app</string>
 	<key>UIBackgroundModes</key>
 	<array/>
 	<key>WKBackgroundModes</key>
 	<array>
 		<string>alarm</string>
+		<string>workout-processing</string>
 	</array>
 	<key>WKExtensionDelegateClassName</key>
 	<string>$(PRODUCT_MODULE_NAME).ExtensionDelegate</string>

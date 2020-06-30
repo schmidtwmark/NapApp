@@ -9,27 +9,26 @@
 import Foundation
 import Combine
 import SwiftUI
+import HealthKit
 
-var session = WKExtendedRuntimeSession()
+var session : WKExtendedRuntimeSession?
 var delegate = ExtensionDelegate()
-
 
 let emojis = ["🐑", "💤", "😴"]
 struct NapView: View {
     private let targetTime : Date
-    
+    var healthStore = HKHealthStore()
+
     init(targetTime : Date) {
         self.targetTime = targetTime
-        // TODO start session
-//        session.delegate = delegate
-//        session.start(at: target)
-//        print("Session started")
     }
+
     
     var body: some View {
         GeometryReader {
             geometry in
             ZStack {
+                HeartRateView().offset(x: 0, y: CGFloat(-geometry.frame(in: .global).height * 0.25))
                 VStack {
                         Text("Waking around")
                         Text(self.dateFormatTime(date: self.targetTime))
@@ -37,16 +36,64 @@ struct NapView: View {
                     }
                 CharacterArc(geometry: geometry, characters: emojis)
             }
-        }.navigationBarTitle("Cancel")
-            .edgesIgnoringSafeArea(.vertical)
+        }
+        .navigationBarTitle("Cancel")
+        .edgesIgnoringSafeArea(.vertical)
+        .onAppear(perform: start)
+        .onDisappear(perform: stop)
         
-//            .frame(width: .infinity, height: 44, alignment: .center)
+        
     }
     
     func dateFormatTime(date : Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a"
         return dateFormatter.string(from: date)
+    }
+    
+    func start() {
+        let healthKitTypes: Set = [
+            HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!]
+        
+        healthStore.requestAuthorization(toShare: [], read: healthKitTypes) { _, _ in }
+        
+        print("Starting session!")
+        delegate.store = healthStore
+        session = WKExtendedRuntimeSession()
+        session!.delegate = delegate
+        session!.start(at: targetTime)
+        
+    }
+    
+    func stop() {
+        print("Nap view disappearing")
+        guard let session = session else {
+            print("Cannot cancel session")
+            return
+        }
+        session.invalidate()
+        
+    }
+}
+
+struct HeartRateView : View{
+
+    var body : some View {
+        if delegate.heartData.getLastHeartRate() != nil {
+            return AnyView(Text("❤️ \(delegate.heartData.getLastHeartRate()!.heartRate) BPM"))
+        } else {
+            return AnyView(EmptyView())
+        }
+    }
+    private func getView() -> some View {
+        if delegate.heartData.getLastHeartRate() != nil {
+            print("Has heart rate value")
+            return AnyView(Text("❤️ \(delegate.heartData.getLastHeartRate()!.heartRate) BPM"))
+        } else {
+            print("Doesn't has heart rate value")
+            return AnyView(EmptyView())
+        }
+        
     }
 }
 
@@ -98,13 +145,12 @@ struct CharacterArc : View {
         Text(characters[animationConfig.index])
             .font(.system(size: self.width * 0.15))
             .position(pointAlongPath(t: CGFloat(adjustParameter(t: animationConfig.t))))
-        .onReceive(Timer.publish(every: 0.01, on: .main, in: .default).autoconnect(),
+            .onReceive(Timer.publish(every: 0.01, on: .main, in: .default).autoconnect(),
                 perform: {
                     let value = $0.timeIntervalSince1970 / 1.5
                     self.animationConfig.t = value.truncatingRemainder(dividingBy: 2)
                     self.animationConfig.index = Int(((value + 0.5) / 2).truncatingRemainder(dividingBy: TimeInterval(self.characters.count)))
-                    print("t: " + String(self.animationConfig.t) + " index: " + String(self.animationConfig.index))
-                    
+
                 }
         )
 

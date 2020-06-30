@@ -12,6 +12,15 @@ import SwiftUI
 
 var times = [5, 10, 20, 30, 40, 50, 60, 75, 90, 120]
 
+
+func getTimeForIndex(index: Int) -> Date{
+    let minutes = times[index]
+//    let seconds = minutes * 60
+    let now = Date()
+//    let target = now.advanced(by: TimeInterval(seconds))
+    let target = now.advanced(by: TimeInterval(minutes))
+    return target
+}
 struct MainView: View {
     
     @State private var selectedTimeIndex = 0;
@@ -43,7 +52,7 @@ struct StartButton: View {
     }
     var body: some View {
         NavigationLink(
-            destination: NapView(targetTime:Date().advanced(by: TimeInterval(times[self.selectedTimeIndex])))) {
+        destination: NapView(targetTime: getTimeForIndex(index: self.selectedTimeIndex))) {
                Text("Start")
             }
         .accentColor(Color.green)

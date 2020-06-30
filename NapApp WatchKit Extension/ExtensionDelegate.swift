@@ -7,26 +7,117 @@
 //
 
 import WatchKit
+import HealthKit
+import Combine
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate, WKExtendedRuntimeSessionDelegate{
+    
+    var timer : Timer?
+    public var store : HKHealthStore?
+    public var heartData : HeartData = HeartData()
+    
+    let heartRateQuantity = HKUnit(from: "count/min")
+
+    
     func extendedRuntimeSession(_ extendedRuntimeSession: WKExtendedRuntimeSession, didInvalidateWith reason: WKExtendedRuntimeSessionInvalidationReason, error: Error?) {
         
-        print("extendedRuntimeSession")
+        print("extendedRuntimeSession didInvalidateWith")
+        timer?.invalidate()
     }
     
     func extendedRuntimeSessionDidStart(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
-        print("extendedRuntimeSessionDidStart")
-        // TODO start tracking heart rate?
-        
-        // How to buzz?
-        
+        print("extendedRuntimeSessionDidStart at " + Date().description + " will expire at " + extendedRuntimeSession.expirationDate!.description)
+
+//        if(extendedRuntimeSession.state == WKExtendedRuntimeSessionState.running) {
+//            extendedRuntimeSession.notifyUser(hapticType: WKHapticType.notification, repeatHandler: {_ in 4})
+//        }
+        print("Starting, session state \(extendedRuntimeSession)")
+        tick()
+        subscribeToHeartBeatChanges()
     }
-    
     func extendedRuntimeSessionWillExpire(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
         print("extendedRuntimeSessionWillExpire")
+        // TODO clean up timer and wake up the user here
         
     }
     
+    private func tick() {
+        print("Ticking")
+        self.startHeartRateQuery(quantityTypeIdentifier: .heartRate)
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false, block: { [weak self] (_) in
+            print("In timer")
+            self?.tick()
+        })
+    }
+    
+    public func subscribeToHeartBeatChanges() {
+        // Creating the sample for the heart rate
+        guard let healthStore = store else {
+            print("No healthstore")
+            return
+        }
+        guard let sampleType: HKSampleType =
+            HKObjectType.quantityType(forIdentifier: .heartRate) else {
+                return
+        }
+        
+        let heartRateQuery = HKObserverQuery.init(
+            sampleType: sampleType,
+            predicate: nil) {  query, completionHandler, error in
+                guard error == nil else {
+                    print("error with observer query")
+                    return
+                }
+//                
+//                print("Successfully subscribed to heart beats")
+//                if self.timer == nil {
+//                    self.tick()
+//                }
+//                completionHandler()
+
+        }
+        print("Subscribing to heart beats...")
+        healthStore.execute(heartRateQuery)
+    }
+    
+
+    private func startHeartRateQuery(quantityTypeIdentifier: HKQuantityTypeIdentifier) {
+           
+        guard let healthStore = store else {
+            print("No healthstore")
+            return
+        }
+        print("Starting heart rate query")
+        let predicate = HKQuery
+            .predicateForSamples(
+                withStart: Date().addingTimeInterval(-3600),
+                end: Date(),
+            options: [])
+
+        let sortDescriptor = NSSortDescriptor(
+            key: HKSampleSortIdentifierStartDate,
+            ascending: false)
+        let query = HKSampleQuery(sampleType: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!,
+                                  predicate: predicate,
+                                  limit: Int(1),
+                                  sortDescriptors: [sortDescriptor]) { query, results, error in
+
+                                    guard let samples = results as? [HKQuantitySample] else {
+                                        return
+                                    }
+                                    for s in samples {
+                                        let heartRate = s.quantity.doubleValue(for: self.heartRateQuantity)
+                                        let timestamp = s.endDate
+                                        print("Recent heart rate: \(heartRate) at time \(timestamp)")
+                                        self.heartData.append(
+                                            heartRate: heartRate,
+                                            timestamp: timestamp)
+                                    }
+        }
+        healthStore.execute(query)
+
+    }
+
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
